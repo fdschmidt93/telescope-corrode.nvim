@@ -125,7 +125,7 @@ end
 return function(opts)
 	opts = opts or {}
 
-	local cache = vim.fs.joinpath(vim.fn.stdpath("cache"), "telescope-staged-fd")
+	local cache = vim.fs.joinpath(vim.fn.stdpath("cache"), "telescope-corrode")
 	if vim.fn.isdirectory(cache) == 0 then
 		vim.fn.mkdir(cache)
 	end
@@ -133,7 +133,7 @@ return function(opts)
 	local filename = os.time() -- store each search by lua timestamp
 	local path = vim.fs.joinpath(cache, filename)
 
-	-- launch `fd` and output result to $NVIM_CACHE/telescope-staged-fd/$TIMESTAMP
+	-- launch `fd` and output result to $NVIM_CACHE/telescope-corrode/$TIMESTAMP
 	vim.fn.jobstart(string.format("fd -t=f --base-directory=%s > %s", cwd, path))
 
 	vim.api.nvim_create_autocmd("FileType", {
