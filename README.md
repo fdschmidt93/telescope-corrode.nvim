@@ -1,6 +1,6 @@
 # telescope-corrode.nvim
 
-This extension is probably not for you. It is a hacky way to get a `Telescope find_files` style picker non-blocking and _blazingly_ fast.
+This extension is probably not for you. It is a hacky way to get a `Telescope find_files` style picker non-blocking and, of course, _blazingly_ fast.
 
 How?
 

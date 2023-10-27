@@ -32,19 +32,21 @@ M.find_all_offsets = function(line, matches)
 		else
 			match_ = match
 		end
-		local is_case_sensitive = match_:lower() ~= match_ -- true if match_ has any uppercase characters
+		if match_ ~= "" then
+			local is_case_sensitive = match_:lower() ~= match_ -- true if match_ has any uppercase characters
 
-		local pattern = is_case_sensitive and match_ or string.lower(match_)
-		local search_line = is_case_sensitive and line or string.lower(line)
+			local pattern = is_case_sensitive and match_ or string.lower(match_)
+			local search_line = is_case_sensitive and line or string.lower(line)
 
-		local start = 1
-		while start do
-			local s, e = string.find(search_line, pattern, start, true) -- true makes the search plain (no pattern match_ing)
-			if s then
-				table.insert(offsets, { match_ = match_, start = s - 1, end_ = e })
-				start = e + 1
-			else
-				break -- This will exit the while loop immediately
+			local start = 1
+			while start do
+				local s, e = string.find(search_line, pattern, start, true) -- true makes the search plain (no pattern match_ing)
+				if s then
+					table.insert(offsets, { match_ = match_, start = s - 1, end_ = e })
+					start = e + 1
+				else
+					break -- This will exit the while loop immediately
+				end
 			end
 		end
 	end

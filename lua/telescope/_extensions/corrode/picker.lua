@@ -181,9 +181,11 @@ return function(opts)
 		--   1. Group them (i.e., py$ lua$ -> *.(py|lua)$)
 		--   2. Move them to end of prompt such that they are not included in permutations
 		for i, t in ipairs(tokens) do
-			if t:sub(-1, -1) == "$" then
+			if t:sub(-1, -1) == "$" and not t:sub(-2, -2) == [[\]] then
 				table.insert(file_ext_ids, i)
-				file_ext[#file_ext + 1] = vim.split(t:sub(1, -2), ",")
+				if t ~= "$" then
+					file_ext[#file_ext + 1] = vim.split(t:sub(1, -2), ",")
+				end
 			end
 		end
 
