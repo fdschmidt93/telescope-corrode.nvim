@@ -134,7 +134,21 @@ return function(opts)
 	local path = vim.fs.joinpath(cache, filename)
 
 	-- launch `fd` and output result to $NVIM_CACHE/telescope-corrode/$TIMESTAMP
-	vim.fn.jobstart(string.format("fd -t=f --base-directory=%s > %s", cwd, path))
+	local fd = vim.uv.fs_open(path, "a", 438)
+	vim.system({ "fd", "-t=f" }, {
+		cwd = cwd,
+		stdout = function(_, data)
+			if data then
+				if fd then
+					pcall(vim.uv.fs_write, fd, data)
+				end
+			end
+		end,
+	}, function()
+		if fd then
+			pcall(vim.uv.fs_close, fd)
+		end
+	end)
 
 	vim.api.nvim_create_autocmd("FileType", {
 		pattern = "TelescopePrompt",
@@ -156,20 +170,8 @@ return function(opts)
 		end,
 	})
 
-	local file_exists = false
 	local picker
 	local find_command = finders.new_job(function(prompt)
-		if not file_exists then
-			file_exists = vim.wait(10, function()
-				local stat = vim.uv.fs_stat(path)
-				local ret = stat and stat.size > 10 or false
-				return ret
-			end, 1, true)
-			if not file_exists then
-				picker:refresh()
-			end
-		end
-
 		if not prompt or prompt == "" then
 			return { "rg", "-N", "--color=never", "--smart-case", "--json", "--", "^", path }
 		end
