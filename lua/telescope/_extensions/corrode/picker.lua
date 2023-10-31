@@ -144,6 +144,7 @@ return function(opts)
 				buffer = args.buf,
 				once = true,
 				callback = function()
+					prompt_tokens = {}
 					if vim.fn.filereadable(path) == 1 then
 						local ret = vim.fn.delete(path)
 						if ret ~= 0 then
