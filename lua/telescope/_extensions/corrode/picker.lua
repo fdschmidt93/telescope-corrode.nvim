@@ -211,12 +211,6 @@ return function(opts)
 		tiebreak = function(current_entry, existing_entry)
 			return current_entry.len < existing_entry.len
 		end,
-		on_input_filter_cb = function(prompt)
-			if prompt == nil or prompt == "" then
-				-- match anything on empty prompt
-				return { prompt = "^" }
-			end
-		end,
 	})
 	picker:find()
 end
